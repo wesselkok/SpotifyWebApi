@@ -1,0 +1,80 @@
+﻿@using SpotifyApp.Core.Services.SpotifyPlaylistService.Models
+@using SpotifyApp.Api.ViewModels
+
+@{
+    ViewData["Title"] = "Playlists";
+    List<SpotifyPlaylist> playlists = (List<SpotifyPlaylist>)ViewData["Playlists"];
+}
+
+@model CopyPlaylistViewModel
+
+<h1 class="display-4">Playlists</h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#copyPlaylistModal" style="top: 0; right: 0; position: absolute;">
+    Copy playlists
+</button>
+
+<div class="text-center">
+    <div class="container" style="margin-top: 20px; padding: 0;">
+        <div class="row justify-content-center">
+            @foreach (SpotifyPlaylist playlist in playlists)
+            {
+                <div class="col-sm-12 col-md-6 col-lg-4" style="margin-bottom: 20px;">
+                    <div class="card" style="height: 100%;">
+                        @if (playlist.images.Any())
+                        {
+                            <img src="@(playlist.images[0].url)" class="card-img-top" alt="...">
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@(playlist.name)</h5>
+                            <p class="card-text">@(playlist.description)</p>
+
+                        </div>
+                        <div class="card-footer">
+                            <a class="card-link" asp-area="" asp-controller="Spotify" asp-action="GetTracks" asp-route-playlistId="@(playlist.id)">See tracks</a>
+                            <a class="card-link" asp-area="" asp-controller="Spotify" asp-action="GetDuplicateTracks" asp-route-playlistId="@(playlist.id)">See duplicate tracks</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="copyPlaylistModal" tabindex="-1" aria-labelledby="copyPlaylistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-controller="Spotify" asp-action="Copy" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Copy playlis</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        From: <select class="form-control" asp-for="OriginPlaylistId">
+                            @foreach (SpotifyPlaylist playlist in playlists)
+                            {
+                                <option value="@(playlist.id)">@(playlist.name)</option>
+                            }
+                        </select>
+                        Target: <select class="form-control" asp-for="TargetPlaylistId">
+                            @foreach (SpotifyPlaylist playlist in playlists)
+                            {
+                                <option value="@(playlist.id)">@(playlist.name)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Copy</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
