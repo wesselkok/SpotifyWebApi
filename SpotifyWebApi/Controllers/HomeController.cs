@@ -13,15 +13,13 @@ namespace SpotifyApp.Api.Controllers
     [Route("")]
     public class HomeController : Controller
     {
-        private readonly ISpotifyPlaylistLogic _spotifyPlaylistLogic;
         private readonly ISpotifyAccountService _spotifyAccountService;
         private readonly IConfiguration _configuration;
         private SpotifyConfiguration _spotifyConfiguration;
         private readonly string[] scopes = new string[] { "playlist-read-collaborative", "playlist-modify-public", "playlist-read-private", "playlist-modify-private" };
 
-        public HomeController(ISpotifyPlaylistLogic spotifyPlaylistLogic, ISpotifyAccountService spotifyAccountService, ISpotifyPlaylistService spotifyPlaylistService, IConfiguration configuration)
+        public HomeController(ISpotifyAccountService spotifyAccountService, ISpotifyPlaylistService spotifyPlaylistService, IConfiguration configuration)
         {
-            _spotifyPlaylistLogic = spotifyPlaylistLogic;
             _spotifyAccountService = spotifyAccountService;
             _configuration = configuration;
             _spotifyConfiguration = SpotifyConfiguration.Instance;
@@ -44,10 +42,6 @@ namespace SpotifyApp.Api.Controllers
                 }
 
                 if (string.IsNullOrWhiteSpace(_spotifyConfiguration.Token)) throw new Exception("Invalid token");
-
-                // Do logic
-                //var playlists = await _spotifyPlaylistLogic.GetPlaylists(_spotifyConfiguration.Token);
-
                 return View();
 
             }

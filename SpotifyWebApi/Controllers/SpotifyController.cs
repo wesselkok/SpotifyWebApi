@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using SpotifyApp.Api.Attributes;
 using SpotifyApp.Api.ViewModels;
 using SpotifyApp.Core.Config;
 using SpotifyApp.Core.Logic.Interfaces;
-using SpotifyApp.Core.Services.SpotifyAccountService;
-using SpotifyApp.Core.Services.SpotifyPlaylistService;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -38,9 +34,8 @@ namespace SpotifyApp.Api.Controllers
                 ViewData["Playlists"] = playlists.items;
                 return View("Playlists");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Write(ex);
                 return BadRequest();
             }
         }
@@ -57,9 +52,8 @@ namespace SpotifyApp.Api.Controllers
                 ViewData["PlaylistId"] = playlistId;
                 return View("Tracks");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Write(ex);
                 return BadRequest();
             }
         }
@@ -94,9 +88,8 @@ namespace SpotifyApp.Api.Controllers
 
                 return File(bytes, "application/json", fileName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Write(ex);
                 return BadRequest();
             }
         }
@@ -111,9 +104,8 @@ namespace SpotifyApp.Api.Controllers
                 var result = await _spotifyPlaylistLogic.CopyPlaylist(_spotifyConfiguration.Token, copyPlaylistViewModel.OriginPlaylistId, copyPlaylistViewModel.TargetPlaylistId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Write(ex);
                 return BadRequest();
             }
         }
@@ -129,9 +121,8 @@ namespace SpotifyApp.Api.Controllers
                 ViewData["DuplicateTracks"] = playlistDuplicateTracks;
                 return View("DuplicateTracks");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Write(ex);
                 return BadRequest();
             }
         }
